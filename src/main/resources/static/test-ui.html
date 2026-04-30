@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPA System Test UI</title>
+    <style>
+        :root {
+            --bg: #f6f2e9;
+            --panel: rgba(255, 252, 245, 0.9);
+            --panel-strong: #fffaf0;
+            --line: #d7c7a8;
+            --text: #2f2417;
+            --muted: #7d6b53;
+            --brand: #b65a2a;
+            --brand-dark: #7f3411;
+            --accent: #1f6b5c;
+            --danger: #a33434;
+            --shadow: 0 18px 50px rgba(95, 63, 28, 0.16);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(182, 90, 42, 0.18), transparent 28%),
+                radial-gradient(circle at top right, rgba(31, 107, 92, 0.14), transparent 25%),
+                linear-gradient(135deg, #f4ecdf 0%, #efe3cf 44%, #f8f3e8 100%);
+            min-height: 100vh;
+        }
+
+        .shell {
+            width: min(1440px, calc(100% - 32px));
+            margin: 24px auto 40px;
+        }
+
+        .hero {
+            padding: 28px;
+            border: 1px solid rgba(127, 52, 17, 0.15);
+            border-radius: 28px;
+            background: linear-gradient(140deg, rgba(255, 248, 236, 0.96), rgba(248, 239, 221, 0.92));
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: clamp(28px, 4vw, 44px);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+            max-width: 760px;
+            line-height: 1.7;
+        }
+
+        .status-bar {
+            margin-top: 18px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.68);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid rgba(125, 107, 83, 0.18);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+
+        .side {
+            padding: 18px;
+            position: sticky;
+            top: 20px;
+            align-self: start;
+        }
+
+        .main {
+            display: grid;
+            gap: 18px;
+        }
+
+        .card {
+            padding: 18px;
+        }
+
+        h2 {
+            margin: 0 0 14px;
+            font-size: 20px;
+        }
+
+        h3 {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+
+        .field {
+            display: grid;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px 14px;
+            font: inherit;
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.94);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: "Cascadia Code", Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        button {
+            border: 0;
+            border-radius: 14px;
+            padding: 11px 14px;
+            font: inherit;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            cursor: pointer;
+            transition: transform 0.16s ease, opacity 0.16s ease;
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, #275f56, #173d37);
+        }
+
+        button.ghost {
+            color: var(--brand-dark);
+            background: rgba(255, 250, 240, 0.96);
+            border: 1px solid var(--line);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #c34747, #8b2525);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .three {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .response {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #20180f;
+            color: #f8eed8;
+            border-radius: 18px;
+            padding: 16px;
+            min-height: 220px;
+            max-height: 520px;
+            overflow: auto;
+            font-family: "Cascadia Code", Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .log {
+            margin-top: 10px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: rgba(31, 107, 92, 0.08);
+            color: var(--accent);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1080px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .side {
+                position: static;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .grid, .three {
+                grid-template-columns: 1fr;
+            }
+
+            .shell {
+                width: min(100% - 20px, 1440px);
+                margin-top: 12px;
+            }
+
+            .hero, .card, .side {
+                border-radius: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="shell">
+    <section class="hero">
+        <h1>RPA System Module Test UI</h1>
+        <p>这个页面是给你直接联调后端接口用的。先登录拿 token，然后可以测试当前用户、个人信息、用户管理、角色管理、资源管理，不需要再单独起一个前端工程。</p>
+        <div class="status-bar">
+            <div class="pill">Base URL: <span id="baseUrlText"></span></div>
+            <div class="pill">Token: <span id="tokenState">未登录</span></div>
+        </div>
+    </section>
+
+    <div class="layout">
+        <aside class="panel side">
+            <div class="section-head">
+                <h2>登录区</h2>
+                <button class="ghost" id="clearTokenBtn" type="button">清空 Token</button>
+            </div>
+
+            <div class="field">
+                <label for="baseUrl">接口基础地址</label>
+                <input id="baseUrl" value="http://localhost:8080" />
+            </div>
+            <div class="field">
+                <label for="username">用户名</label>
+                <input id="username" value="admin" />
+            </div>
+            <div class="field">
+                <label for="password">密码</label>
+                <input id="password" type="password" value="123456" />
+            </div>
+            <div class="actions">
+                <button id="loginBtn" type="button">登录</button>
+                <button id="currentUserBtn" class="secondary" type="button">当前用户</button>
+            </div>
+
+            <div class="field" style="margin-top: 14px;">
+                <label for="token">Bearer Token</label>
+                <textarea id="token" style="min-height: 160px;"></textarea>
+            </div>
+
+            <div class="log" id="quickLog">准备就绪，先点击“登录”。</div>
+        </aside>
+
+        <main class="main">
+            <section class="panel card">
+                <div class="section-head">
+                    <h2>个人信息</h2>
+                    <div class="actions">
+                        <button class="secondary" id="loadProfileBtn" type="button">读 current-user</button>
+                        <button id="updateProfileBtn" type="button">更新资料</button>
+                        <button class="danger" id="changePasswordBtn" type="button">修改密码</button>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="field">
+                        <label for="profileRealName">真实姓名</label>
+                        <input id="profileRealName" placeholder="系统管理员" />
+                    </div>
+                    <div class="field">
+                        <label for="profileMobile">手机号</label>
+                        <input id="profileMobile" placeholder="13800138000" />
+                    </div>
+                    <div class="field">
+                        <label for="profileEmail">邮箱</label>
+                        <input id="profileEmail" placeholder="admin@rpa.com" />
+                    </div>
+                    <div class="field">
+                        <label for="oldPassword">原密码</label>
+                        <input id="oldPassword" type="password" placeholder="原密码" />
+                    </div>
+                    <div class="field">
+                        <label for="newPassword">新密码</label>
+                        <input id="newPassword" type="password" placeholder="新密码" />
+                    </div>
+                    <div class="field">
+                        <label for="confirmPassword">确认新密码</label>
+                        <input id="confirmPassword" type="password" placeholder="确认新密码" />
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel card">
+                <div class="section-head">
+                    <h2>用户管理</h2>
+                    <div class="actions">
+                        <button class="secondary" id="usersPageBtn" type="button">用户分页</button>
+                        <button id="createUserBtn" type="button">新增用户</button>
+                        <button id="updateUserBtn" type="button">修改用户</button>
+                        <button class="ghost" id="resetPasswordBtn" type="button">重置密码</button>
+                        <button class="ghost" id="changeUserStatusBtn" type="button">切换状态</button>
+                        <button class="danger" id="deleteUserBtn" type="button">删除用户</button>
+                    </div>
+                </div>
+                <div class="three">
+                    <div class="field">
+                        <label for="usersPageNum">pageNum</label>
+                        <input id="usersPageNum" value="1" />
+                    </div>
+                    <div class="field">
+                        <label for="usersPageSize">pageSize</label>
+                        <input id="usersPageSize" value="10" />
+                    </div>
+                    <div class="field">
+                        <label for="usersQueryRoleId">查询 roleId</label>
+                        <input id="usersQueryRoleId" placeholder="14" />
+                    </div>
+                </div>
+                <div class="three">
+                    <div class="field">
+                        <label for="usersQueryUsername">查询用户名</label>
+                        <input id="usersQueryUsername" placeholder="admin" />
+                    </div>
+                    <div class="field">
+                        <label for="usersQueryRealName">查询姓名</label>
+                        <input id="usersQueryRealName" placeholder="系统管理员" />
+                    </div>
+                    <div class="field">
+                        <label for="userId">操作用户 ID</label>
+                        <input id="userId" placeholder="3" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="userPayload">用户请求体 JSON</label>
+                    <textarea id="userPayload">{
+  "username": "tester01",
+  "realName": "测试用户",
+  "email": "tester01@rpa.com",
+  "mobile": "13800138001",
+  "roleIds": [14],
+  "status": 1
+}</textarea>
+                </div>
+            </section>
+
+            <section class="panel card">
+                <div class="section-head">
+                    <h2>角色管理</h2>
+                    <div class="actions">
+                        <button class="secondary" id="rolesPageBtn" type="button">角色分页</button>
+                        <button id="createRoleBtn" type="button">新增角色</button>
+                        <button id="updateRoleBtn" type="button">修改角色</button>
+                        <button id="assignResourcesBtn" type="button">分配资源</button>
+                        <button class="danger" id="deleteRoleBtn" type="button">删除角色</button>
+                    </div>
+                </div>
+                <div class="three">
+                    <div class="field">
+                        <label for="rolesPageNum">pageNum</label>
+                        <input id="rolesPageNum" value="1" />
+                    </div>
+                    <div class="field">
+                        <label for="rolesPageSize">pageSize</label>
+                        <input id="rolesPageSize" value="10" />
+                    </div>
+                    <div class="field">
+                        <label for="roleId">操作角色 ID</label>
+                        <input id="roleId" placeholder="14" />
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="field">
+                        <label for="rolesQueryCode">查询角色编码</label>
+                        <input id="rolesQueryCode" placeholder="ADMIN" />
+                    </div>
+                    <div class="field">
+                        <label for="rolesQueryName">查询角色名称</label>
+                        <input id="rolesQueryName" placeholder="管理员" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="rolePayload">角色请求体 JSON</label>
+                    <textarea id="rolePayload">{
+  "roleCode": "OPS_TEST",
+  "roleName": "运维测试角色",
+  "description": "给前端联调使用",
+  "remark": "test-ui",
+  "status": 1
+}</textarea>
+                </div>
+                <div class="field">
+                    <label for="roleResourcePayload">分配资源请求体 JSON</label>
+                    <textarea id="roleResourcePayload">{
+  "resourceIds": [28, 30, 31]
+}</textarea>
+                </div>
+            </section>
+
+            <section class="panel card">
+                <div class="section-head">
+                    <h2>资源管理</h2>
+                    <div class="actions">
+                        <button class="secondary" id="resourceTreeBtn" type="button">资源树</button>
+                        <button id="createResourceBtn" type="button">新增资源</button>
+                        <button id="updateResourceBtn" type="button">修改资源</button>
+                        <button class="danger" id="deleteResourceBtn" type="button">删除资源</button>
+                    </div>
+                </div>
+                <div class="three">
+                    <div class="field">
+                        <label for="resourceType">resourceType 过滤</label>
+                        <select id="resourceType">
+                            <option value="">全部</option>
+                            <option value="1">目录</option>
+                            <option value="2">菜单</option>
+                            <option value="3">按钮</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="resourceId">操作资源 ID</label>
+                        <input id="resourceId" placeholder="30" />
+                    </div>
+                    <div class="field">
+                        <label>&nbsp;</label>
+                        <div class="hint">资源树接口是 `GET /api/v1/resources/tree`。</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="resourcePayload">资源请求体 JSON</label>
+                    <textarea id="resourcePayload">{
+  "parentId": 28,
+  "resourceName": "测试按钮",
+  "resourceCode": "TEST_BUTTON",
+  "resourceType": 3,
+  "path": null,
+  "component": null,
+  "permissionKey": "system:test:button",
+  "icon": null,
+  "sortNo": 99,
+  "remark": "test-ui",
+  "status": 1
+}</textarea>
+                </div>
+            </section>
+
+            <section class="panel card">
+                <div class="section-head">
+                    <h2>响应结果</h2>
+                    <div class="actions">
+                        <button class="ghost" id="clearResponseBtn" type="button">清空面板</button>
+                    </div>
+                </div>
+                <div class="response" id="responseBox">等待请求...</div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    const storageKey = "rpa-test-ui-token";
+    const baseUrlInput = document.getElementById("baseUrl");
+    const tokenInput = document.getElementById("token");
+    const responseBox = document.getElementById("responseBox");
+    const tokenState = document.getElementById("tokenState");
+    const baseUrlText = document.getElementById("baseUrlText");
+    const quickLog = document.getElementById("quickLog");
+
+    function setQuickLog(text, isError = false) {
+        quickLog.textContent = text;
+        quickLog.style.background = isError ? "rgba(163, 52, 52, 0.10)" : "rgba(31, 107, 92, 0.08)";
+        quickLog.style.color = isError ? "#a33434" : "#1f6b5c";
+    }
+
+    function pretty(value) {
+        return typeof value === "string" ? value : JSON.stringify(value, null, 2);
+    }
+
+    function updateMeta() {
+        baseUrlText.textContent = baseUrlInput.value.trim() || "http://localhost:8080";
+        const token = tokenInput.value.trim();
+        tokenState.textContent = token ? "已登录" : "未登录";
+    }
+
+    function saveToken(token) {
+        tokenInput.value = token || "";
+        localStorage.setItem(storageKey, tokenInput.value.trim());
+        updateMeta();
+    }
+
+    function getToken() {
+        return tokenInput.value.trim();
+    }
+
+    function getBaseUrl() {
+        return (baseUrlInput.value.trim() || window.location.origin).replace(/\/$/, "");
+    }
+
+    function parseJson(id) {
+        return JSON.parse(document.getElementById(id).value);
+    }
+
+    function requireValue(id, label) {
+        const value = document.getElementById(id).value.trim();
+        if (!value) {
+            throw new Error(`${label} 不能为空`);
+        }
+        return value;
+    }
+
+    function ensureToken() {
+        const token = getToken();
+        if (!token) {
+            throw new Error("请先登录，或把 token 粘贴到左侧 Token 输入框");
+        }
+        return token;
+    }
+
+    async function request(path, options = {}) {
+        const headers = {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        };
+        const token = getToken();
+        if (token) {
+            headers.Authorization = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+        }
+        const finalOptions = {
+            method: "GET",
+            ...options,
+            headers
+        };
+        const res = await fetch(`${getBaseUrl()}${path}`, finalOptions);
+        const text = await res.text();
+        let data = text;
+        try {
+            data = text ? JSON.parse(text) : null;
+        } catch (e) {
+            data = text;
+        }
+        responseBox.textContent = `HTTP ${res.status}\n\n${pretty(data)}`;
+        if (!res.ok) {
+            throw new Error(typeof data === "string" ? data : pretty(data));
+        }
+        return data;
+    }
+
+    async function run(title, executor) {
+        setQuickLog(`${title} 请求中...`);
+        try {
+            const data = await executor();
+            setQuickLog(`${title} 已完成`);
+            return data;
+        } catch (error) {
+            setQuickLog(`${title} 失败：${error.message}`, true);
+            console.error(error);
+        }
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", () => run("登录", async () => {
+        const data = await request("/api/v1/auth/login", {
+            method: "POST",
+            body: JSON.stringify({
+                username: document.getElementById("username").value.trim(),
+                password: document.getElementById("password").value
+            })
+        });
+        const token = data?.data?.token || data?.data?.accessToken || "";
+        if (token) {
+            saveToken(token);
+        }
+        return data;
+    }));
+
+    document.getElementById("currentUserBtn").addEventListener("click", () => run("当前用户", () => request("/api/v1/auth/current-user")));
+    document.getElementById("loadProfileBtn").addEventListener("click", () => run("读取个人信息", async () => {
+        ensureToken();
+        const data = await request("/api/v1/auth/current-user");
+        const user = data?.data || {};
+        document.getElementById("profileRealName").value = user.realName || "";
+        document.getElementById("profileEmail").value = user.email || "";
+        document.getElementById("profileMobile").value = user.mobile || "";
+        return data;
+    }));
+    document.getElementById("updateProfileBtn").addEventListener("click", () => run("更新个人信息", () => request("/api/v1/profile", {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "PUT",
+        body: JSON.stringify({
+            realName: document.getElementById("profileRealName").value.trim(),
+            email: document.getElementById("profileEmail").value.trim() || null,
+            mobile: document.getElementById("profileMobile").value.trim()
+        })
+    })));
+    document.getElementById("changePasswordBtn").addEventListener("click", () => run("修改密码", () => request("/api/v1/profile/password", {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "PUT",
+        body: JSON.stringify({
+            oldPassword: document.getElementById("oldPassword").value,
+            newPassword: document.getElementById("newPassword").value,
+            confirmPassword: document.getElementById("confirmPassword").value
+        })
+    })));
+
+    document.getElementById("usersPageBtn").addEventListener("click", () => run("用户分页", () => {
+        ensureToken();
+        const params = new URLSearchParams();
+        params.set("pageNum", document.getElementById("usersPageNum").value.trim() || "1");
+        params.set("pageSize", document.getElementById("usersPageSize").value.trim() || "10");
+        const username = document.getElementById("usersQueryUsername").value.trim();
+        const realName = document.getElementById("usersQueryRealName").value.trim();
+        const roleId = document.getElementById("usersQueryRoleId").value.trim();
+        if (username) params.set("username", username);
+        if (realName) params.set("realName", realName);
+        if (roleId) params.set("roleId", roleId);
+        return request(`/api/v1/users/page?${params.toString()}`);
+    }));
+    document.getElementById("createUserBtn").addEventListener("click", () => run("新增用户", () => request("/api/v1/users", {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "POST",
+        body: JSON.stringify(parseJson("userPayload"))
+    })));
+    document.getElementById("updateUserBtn").addEventListener("click", () => run("修改用户", () => request(`/api/v1/users/${requireValue("userId", "用户 ID")}`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "PUT",
+        body: JSON.stringify(parseJson("userPayload"))
+    })));
+    document.getElementById("resetPasswordBtn").addEventListener("click", () => run("重置密码", () => request(`/api/v1/users/${requireValue("userId", "用户 ID")}/reset-password`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "PUT"
+    })));
+    document.getElementById("changeUserStatusBtn").addEventListener("click", () => run("切换用户状态", () => {
+        const userId = requireValue("userId", "用户 ID");
+        ensureToken();
+        const payload = parseJson("userPayload");
+        const nextStatus = payload.status === 1 ? 0 : 1;
+        payload.status = nextStatus;
+        document.getElementById("userPayload").value = JSON.stringify(payload, null, 2);
+        return request(`/api/v1/users/${userId}/status`, {
+            headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${getToken()}` },
+            method: "PUT",
+            body: JSON.stringify({ status: nextStatus })
+        });
+    }));
+    document.getElementById("deleteUserBtn").addEventListener("click", () => run("删除用户", () => request(`/api/v1/users/${requireValue("userId", "用户 ID")}`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "DELETE"
+    })));
+
+    document.getElementById("rolesPageBtn").addEventListener("click", () => run("角色分页", () => {
+        ensureToken();
+        const params = new URLSearchParams();
+        params.set("pageNum", document.getElementById("rolesPageNum").value.trim() || "1");
+        params.set("pageSize", document.getElementById("rolesPageSize").value.trim() || "10");
+        const roleCode = document.getElementById("rolesQueryCode").value.trim();
+        const roleName = document.getElementById("rolesQueryName").value.trim();
+        if (roleCode) params.set("roleCode", roleCode);
+        if (roleName) params.set("roleName", roleName);
+        return request(`/api/v1/roles/page?${params.toString()}`);
+    }));
+    document.getElementById("createRoleBtn").addEventListener("click", () => run("新增角色", () => request("/api/v1/roles", {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "POST",
+        body: JSON.stringify(parseJson("rolePayload"))
+    })));
+    document.getElementById("updateRoleBtn").addEventListener("click", () => run("修改角色", () => request(`/api/v1/roles/${requireValue("roleId", "角色 ID")}`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "PUT",
+        body: JSON.stringify(parseJson("rolePayload"))
+    })));
+    document.getElementById("assignResourcesBtn").addEventListener("click", () => run("分配角色资源", () => request(`/api/v1/roles/${requireValue("roleId", "角色 ID")}/resources`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "PUT",
+        body: JSON.stringify(parseJson("roleResourcePayload"))
+    })));
+    document.getElementById("deleteRoleBtn").addEventListener("click", () => run("删除角色", () => request(`/api/v1/roles/${requireValue("roleId", "角色 ID")}`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "DELETE"
+    })));
+
+    document.getElementById("resourceTreeBtn").addEventListener("click", () => run("资源树", () => {
+        ensureToken();
+        const resourceType = document.getElementById("resourceType").value.trim();
+        const suffix = resourceType ? `?resourceType=${encodeURIComponent(resourceType)}` : "";
+        return request(`/api/v1/resources/tree${suffix}`);
+    }));
+    document.getElementById("createResourceBtn").addEventListener("click", () => run("新增资源", () => request("/api/v1/resources", {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "POST",
+        body: JSON.stringify(parseJson("resourcePayload"))
+    })));
+    document.getElementById("updateResourceBtn").addEventListener("click", () => run("修改资源", () => request(`/api/v1/resources/${requireValue("resourceId", "资源 ID")}`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "PUT",
+        body: JSON.stringify(parseJson("resourcePayload"))
+    })));
+    document.getElementById("deleteResourceBtn").addEventListener("click", () => run("删除资源", () => request(`/api/v1/resources/${requireValue("resourceId", "资源 ID")}`, {
+        headers: { Authorization: getToken().startsWith("Bearer ") ? getToken() : `Bearer ${ensureToken()}` },
+        method: "DELETE"
+    })));
+
+    document.getElementById("clearResponseBtn").addEventListener("click", () => {
+        responseBox.textContent = "等待请求...";
+    });
+
+    document.getElementById("clearTokenBtn").addEventListener("click", () => {
+        saveToken("");
+        setQuickLog("Token 已清空");
+    });
+
+    baseUrlInput.addEventListener("input", updateMeta);
+    tokenInput.addEventListener("input", () => {
+        localStorage.setItem(storageKey, tokenInput.value.trim());
+        updateMeta();
+    });
+
+    saveToken(localStorage.getItem(storageKey) || "");
+    updateMeta();
+    responseBox.textContent = "等待请求...";
+</script>
+</body>
+</html>

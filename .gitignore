@@ -1,0 +1,25 @@
+# Build output
+target/
+dist/
+build/
+
+# Frontend dependencies and caches
+node_modules/
+.npm/
+.pnpm-store/
+
+# IDE and editor files
+.idea/
+.vscode/
+.claude/
+
+# Runtime and temporary files
+tmp_api_doc/
+uploads/
+*.log
+*.tmp
+~$*
+
+# OS files
+.DS_Store
+Thumbs.db
