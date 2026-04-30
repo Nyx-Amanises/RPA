@@ -40,8 +40,11 @@ async function handleLogin() {
   <div class="login-page">
     <div class="login-hero">
       <div class="login-copy">
-        <div class="login-badge">RPA 管理平台</div>
-        <h1>重庆工程学院<br />系统管理门户</h1>
+        <div class="login-brand-lockup" aria-label="NOVA RPA">
+          <span class="login-logo-mark">R</span>
+          <span class="login-badge">NOVA RPA</span>
+        </div>
+        <h1>智控 RPA<br />管理平台</h1>
         <p>接入登录、自动鉴权、系统管理联调的一体化前端入口。</p>
       </div>
       <el-card shadow="hover" class="login-card">

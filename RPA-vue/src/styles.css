@@ -419,6 +419,26 @@ button {
   padding: 40px 24px;
 }
 
+.login-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.login-logo-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-light));
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgba(33, 65, 154, 0.24);
+}
+
 .login-badge {
   display: inline-flex;
   align-items: center;
@@ -427,7 +447,6 @@ button {
   background: rgba(33, 65, 154, 0.1);
   color: var(--brand-primary);
   font-weight: 700;
-  margin-bottom: 20px;
 }
 
 .login-copy h1 {
