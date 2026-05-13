@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>税务经营数据测试站</title>
+    <link rel="icon" href="./assets/mock-tax-mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#/enterprise-info" aria-label="税务经营数据测试站">
+          <img src="./assets/mock-tax-mark.svg" alt="" />
+          <span>
+            <strong>税务经营数据测试站</strong>
+            <small>RPA Mock Spider</small>
+          </span>
+        </a>
+        <nav class="topnav" aria-label="主导航">
+          <a data-route="/enterprise-info" href="#/enterprise-info">企业信息</a>
+          <a data-route="/application" href="#/application">授信申请</a>
+          <a data-route="/invoice-query" href="#/invoice-query">发票查询</a>
+          <a data-route="/tax-report" href="#/tax-report">纳税申报</a>
+          <a data-route="/financial-report" href="#/financial-report">财务报表</a>
+          <a data-route="/risk-info" href="#/risk-info">风险信息</a>
+        </nav>
+      </header>
+
+      <main id="app" class="workspace" aria-live="polite"></main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

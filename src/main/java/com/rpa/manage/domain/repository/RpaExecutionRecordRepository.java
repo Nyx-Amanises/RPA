@@ -13,6 +13,8 @@ public interface RpaExecutionRecordRepository extends JpaRepository<RpaExecution
 
     Optional<RpaExecutionRecord> findTopByTaskIdOrderByStartTimeDesc(Long taskId);
 
+    Optional<RpaExecutionRecord> findTopByTaskIdAndExecuteStatusOrderByStartTimeDesc(Long taskId, Integer executeStatus);
+
     long countByExecuteStatus(Integer executeStatus);
 
     @Query("select avg(e.durationSeconds) from RpaExecutionRecord e where e.durationSeconds is not null")

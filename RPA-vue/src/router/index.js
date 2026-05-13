@@ -14,6 +14,9 @@ import DataCollectionView from '../views/DataCollectionView.vue'
 import DataAnalysisView from '../views/DataAnalysisView.vue'
 import DataProcessingView from '../views/DataProcessingView.vue'
 import DataQueryView from '../views/DataQueryView.vue'
+import IndicatorCalculateView from '../views/IndicatorCalculateView.vue'
+import IndicatorQuotaView from '../views/IndicatorQuotaView.vue'
+import AgentAssistView from '../views/AgentAssistView.vue'
 import { clearPageForbidden } from '../stores/pageAccess'
 import { getAuthToken, getAuthUser } from '../utils/auth'
 import { getDefaultAuthorizedPath, hasPermission } from '../utils/permission'
@@ -109,6 +112,24 @@ const router = createRouter({
           name: 'business-data',
           component: DataQueryView,
           meta: { title: '业务数据', section: 'rpa', permission: 'data:business:page' }
+        },
+        {
+          path: '/indicators/calculate',
+          name: 'indicator-calculate',
+          component: IndicatorCalculateView,
+          meta: { title: '指标计算', section: 'indicator' }
+        },
+        {
+          path: '/indicators/quota',
+          name: 'indicator-quota',
+          component: IndicatorQuotaView,
+          meta: { title: '指标额度计算', section: 'indicator' }
+        },
+        {
+          path: '/indicators/agent-assist',
+          name: 'agent-assist',
+          component: AgentAssistView,
+          meta: { title: 'AI 辅助', section: 'indicator' }
         }
       ]
     }

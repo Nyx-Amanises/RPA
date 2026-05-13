@@ -28,7 +28,8 @@ const topMenuDefinitions = [
       'data:business:page'
     ]
   },
-  { label: '系统管理', key: 'system', route: '/system/profile' }
+  { label: '系统管理', key: 'system', route: '/system/profile' },
+  { label: '指标管理', key: 'indicator' }
 ]
 
 const menuSections = {
@@ -75,6 +76,19 @@ const menuSections = {
           { label: '数据解析', path: '/rpa/data-analysis', permission: 'data:analysis:page' },
           { label: '数据加工', path: '/rpa/data-processing', permission: 'data:processing:page' },
           { label: '业务数据', path: '/rpa/business-data', permission: 'data:business:page' }
+        ]
+      }
+    ]
+  },
+  indicator: {
+    title: '指标管理',
+    groups: [
+      {
+        title: '指标管理',
+        items: [
+          { label: '指标计算', path: '/indicators/calculate' },
+          { label: '指标额度计算', path: '/indicators/quota' },
+          { label: 'AI 辅助', path: '/indicators/agent-assist' }
         ]
       }
     ]
