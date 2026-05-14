@@ -20,6 +20,11 @@ uploads/
 *.tmp
 ~$*
 
+# Local project documents and database snapshots
+*.docx
+rpa_manage_db.sql
+RPA-vue/rpa_manage_db.sql
+
 # OS files
 .DS_Store
 Thumbs.db
